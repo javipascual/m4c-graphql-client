@@ -1,24 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { getChatsQuery } from '../graphql/queries';
 import { Chat } from '../types';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 
 const ChatsList: React.FC = () => {
-  const [chats, setChats] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const body = await fetch(`${process.env.REACT_APP_SERVER_URL}/graphql`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: getChatsQuery }),
-      });
-      const { data: { chats } } = await body.json();
-      setChats(chats);
-    }
-    fetchData();
-  }, []);
+  const { data: { chats = [] } } = useQuery<any>(getChatsQuery);
 
   return (
     <React.Fragment>

@@ -1,4 +1,6 @@
-export const getChatsQuery = `
+import gql from 'graphql-tag';
+
+export const getChatsQuery = gql`
   query GetChats {
     chats {
       id
