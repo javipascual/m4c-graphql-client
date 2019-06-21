@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getChatQuery } from '../graphql/queries';
 import moment from 'moment';
 import { Chat as ChatType, Message } from '../types';
+import { Link } from 'react-router-dom';
 
 
 interface ChatParams {
@@ -29,7 +30,7 @@ const Chat: React.FC<ChatParams> = ({ chatId }) => {
   return (
     <React.Fragment>
       <div style={style.toolbar}>
-        <button style={style.backButton}>{"⬅"}</button>
+        <Link style={style.backButton} to={'/chats'}>{"⬅"}</Link>
         <img style={style.picture} src={chat.picture} alt="profile" />
         <div style={style.name}>{chat.name}</div>
       </div>
@@ -59,6 +60,7 @@ const style: { [id: string] : React.CSSProperties } = {
   },
   backButton: {
     color: 'black',
+    textDecoration: 'none',
     margin: '10px 30px',
     fontSize: '30px',
   },

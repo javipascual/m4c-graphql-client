@@ -1,24 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, RouteComponentProps } from 'react-router-dom';
+import Chat from './components/Chat';
+import ChatsList from './components/ChatsList';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Route exact path="/" component={ChatsList} />
+      <Route exact path="/chats" component={ChatsList} />
+      <Route exact path="/chats/:chatId"
+        component={({ match }: RouteComponentProps<{ chatId: string }>) => (
+          <Chat chatId={match.params.chatId} />
+        )}
+      />
+    </BrowserRouter>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getChatsQuery } from '../graphql/queries';
 import { Chat } from '../types';
+import { Link } from 'react-router-dom';
 
 
 const ChatsList: React.FC = () => {
@@ -26,8 +27,10 @@ const ChatsList: React.FC = () => {
         <ul style={style.list}>
           {chats.map((chat: Chat) => (
             <li style={style.listItem} key={chat.id}>
-              <img style={style.picture} src={chat.picture} alt="Profile" />
-              <div style={style.content}>{chat.name}</div>
+              <Link style={style.listLink} to={`/chats/${chat.id}`}>
+                <img style={style.picture} src={chat.picture} alt="Profile" />
+                <div style={style.content}>{chat.name}</div>
+              </Link>
             </li>
           ))}
         </ul>
@@ -56,6 +59,10 @@ const style: { [id: string]: React.CSSProperties } = {
     height: '76px',
     padding: '1 rem',
     display: 'flex'
+  },
+  listLink: {
+    display: 'flex',
+    textDecoration: 'none',
   },
   picture: {
     height: '50px',
