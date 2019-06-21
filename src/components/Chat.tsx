@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { getChatQuery } from '../graphql/queries';
 import moment from 'moment';
-import { Chat as ChatType, Message } from '../types';
+import { Message } from '../types';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-apollo-hooks';
 
 
 interface ChatParams {
@@ -10,20 +11,7 @@ interface ChatParams {
 }
 
 const Chat: React.FC<ChatParams> = ({ chatId }) => {
-  const [chat, setChat] = useState<ChatType|null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const body = await fetch(`${process.env.REACT_APP_SERVER_URL}/graphql`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: getChatQuery, variables: { chatId } }),
-      });
-      const { data: { chat } } = await body.json();
-      setChat(chat);
-    };
-    fetchData();
-  }, [chatId]);
+  const { data: { chat } } = useQuery<any>(getChatQuery, { variables: { chatId } });
 
   if (!chat) return null;
 

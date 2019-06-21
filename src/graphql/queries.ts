@@ -10,7 +10,7 @@ export const getChatsQuery = gql`
   }
 `;
 
-export const getChatQuery = `
+export const getChatQuery = gql`
   query GetChat($chatId: ID!) {
     chat(chatId: $chatId) {
       id
