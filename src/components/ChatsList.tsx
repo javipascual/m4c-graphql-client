@@ -1,22 +1,25 @@
 import React from 'react';
-import { getChatsQuery } from '../graphql/queries';
-import { Chat } from '../types';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
-
+import { useGetChatsQuery } from '../graphql/types';
 
 const ChatsList: React.FC = () => {
-  const { data: { chats = [] } } = useQuery<any>(getChatsQuery);
+  const { data } = useGetChatsQuery();
+
+  if (data === undefined || data.chats === undefined) {
+    return null;
+  }
+
+  const chats = data.chats;
 
   return (
     <React.Fragment>
       <div style={style.toolbar}>M4C GraphQL</div>
       <div style={style.container}>
         <ul style={style.list}>
-          {chats.map((chat: Chat) => (
+          {chats.map(chat => (
             <li style={style.listItem} key={chat.id}>
               <Link style={style.listLink} to={`/chats/${chat.id}`}>
-                <img style={style.picture} src={chat.picture} alt="Profile" />
+                {chat.picture && <img style={style.picture} src={chat.picture} alt="Profile" />}
                 <div style={style.content}>{chat.name}</div>
               </Link>
             </li>

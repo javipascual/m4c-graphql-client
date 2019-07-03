@@ -1,9 +1,7 @@
 import React from 'react';
-import { getChatQuery } from '../graphql/queries';
 import moment from 'moment';
-import { Message } from '../types';
+import { Message, useGetChatQuery } from '../graphql/types';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-apollo-hooks';
 
 
 interface ChatParams {
@@ -11,15 +9,17 @@ interface ChatParams {
 }
 
 const Chat: React.FC<ChatParams> = ({ chatId }) => {
-  const { data: { chat } } = useQuery<any>(getChatQuery, { variables: { chatId } });
-
+  const { data } = useGetChatQuery({variables: { chatId }});
+  if (!data) return null;
+  
+  const chat = data.chat;
   if (!chat) return null;
 
   return (
     <React.Fragment>
       <div style={style.toolbar}>
         <Link style={style.backButton} to={'/chats'}>{"⬅"}</Link>
-        <img style={style.picture} src={chat.picture} alt="profile" />
+        {chat.picture && <img style={style.picture} src={chat.picture} alt="profile" />}
         <div style={style.name}>{chat.name}</div>
       </div>
       <ul style={style.container}>
