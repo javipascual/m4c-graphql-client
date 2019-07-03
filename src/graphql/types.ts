@@ -91,6 +91,14 @@ export type AddMessageMutationVariables = {
 export type AddMessageMutation = { __typename?: "Mutation" } & {
   addMessage: Maybe<{ __typename?: "Message" } & MessageFragment>;
 };
+
+export type MessageAddedSubscriptionVariables = {};
+
+export type MessageAddedSubscription = { __typename?: "Subscription" } & {
+  messageAdded: { __typename?: "Message" } & {
+    chat: Maybe<{ __typename?: "Chat" } & Pick<Chat, "id">>;
+  } & MessageFragment;
+};
 export const ChatFragmentDoc = gql`
   fragment Chat on Chat {
     id
@@ -172,4 +180,27 @@ export function useAddMessageMutation(
     AddMessageMutation,
     AddMessageMutationVariables
   >(AddMessageDocument, baseOptions);
+}
+export const MessageAddedDocument = gql`
+  subscription MessageAdded {
+    messageAdded {
+      chat {
+        id
+      }
+      ...Message
+    }
+  }
+  ${MessageFragmentDoc}
+`;
+
+export function useMessageAddedSubscription(
+  baseOptions?: ReactApolloHooks.SubscriptionHookOptions<
+    MessageAddedSubscription,
+    MessageAddedSubscriptionVariables
+  >
+) {
+  return ReactApolloHooks.useSubscription<
+    MessageAddedSubscription,
+    MessageAddedSubscriptionVariables
+  >(MessageAddedDocument, baseOptions);
 }

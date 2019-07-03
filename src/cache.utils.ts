@@ -13,6 +13,9 @@ export const writeCache = (client: Client, chatId: string, message: Message) => 
 
   if (!data) return;
 
+  // do not update if already exists
+  if (data.chat.messages.some((m: any) => m.id === message.id)) return;
+
   client.writeQuery({
     query: getChatQuery,
     variables: { chatId },

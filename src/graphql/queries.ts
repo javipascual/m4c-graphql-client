@@ -27,3 +27,15 @@ export const addMessageMutation = gql`
   }
   ${Message}
 `;
+
+export const messageAdded = gql`
+  subscription MessageAdded {
+    messageAdded {
+      chat {
+        id
+      },
+      ...Message
+    }
+  }
+  ${Message}
+`;
