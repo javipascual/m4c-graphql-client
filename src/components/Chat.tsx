@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import { Message, useAddMessageMutation, useGetChatQuery } from '../graphql/types';
 import { Link } from 'react-router-dom';
+import { writeCache } from '../cache.utils';
 
 
 interface ChatParams {
@@ -16,6 +17,9 @@ const Chat: React.FC<ChatParams> = ({ chatId }) => {
   const onSendMessage = (content: string) => {
     addMessage({
       variables: { chatId, content },
+      update: (client, { data }) => {
+        writeCache(client, chatId, data.addMessage);
+      },
     });
   };
 
