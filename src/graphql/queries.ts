@@ -18,3 +18,12 @@ export const getChatQuery = gql`
   }
   ${FullChat}
 `;
+
+export const addMessageMutation = gql`
+  mutation AddMessage($chatId: ID!, $content: String!) {
+    addMessage(chatId: $chatId, content: $content) {
+      ...Message
+    }
+  }
+  ${Message}
+`;

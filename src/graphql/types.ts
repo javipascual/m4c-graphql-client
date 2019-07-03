@@ -1,6 +1,7 @@
 /* eslint-disable */
 import gql from "graphql-tag";
 import * as ReactApolloHooks from "react-apollo-hooks";
+import * as ReactApollo from "react-apollo";
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -81,6 +82,15 @@ export type GetChatQueryVariables = {
 export type GetChatQuery = { __typename?: "Query" } & {
   chat: Maybe<{ __typename?: "Chat" } & FullChatFragment>;
 };
+
+export type AddMessageMutationVariables = {
+  chatId: Scalars["ID"];
+  content: Scalars["String"];
+};
+
+export type AddMessageMutation = { __typename?: "Mutation" } & {
+  addMessage: Maybe<{ __typename?: "Message" } & MessageFragment>;
+};
 export const ChatFragmentDoc = gql`
   fragment Chat on Chat {
     id
@@ -138,4 +148,28 @@ export function useGetChatQuery(
     GetChatDocument,
     baseOptions
   );
+}
+export const AddMessageDocument = gql`
+  mutation AddMessage($chatId: ID!, $content: String!) {
+    addMessage(chatId: $chatId, content: $content) {
+      ...Message
+    }
+  }
+  ${MessageFragmentDoc}
+`;
+export type AddMessageMutationFn = ReactApollo.MutationFn<
+  AddMessageMutation,
+  AddMessageMutationVariables
+>;
+
+export function useAddMessageMutation(
+  baseOptions?: ReactApolloHooks.MutationHookOptions<
+    AddMessageMutation,
+    AddMessageMutationVariables
+  >
+) {
+  return ReactApolloHooks.useMutation<
+    AddMessageMutation,
+    AddMessageMutationVariables
+  >(AddMessageDocument, baseOptions);
 }

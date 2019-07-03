@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-import { Message, useGetChatQuery } from '../graphql/types';
+import { Message, useAddMessageMutation, useGetChatQuery } from '../graphql/types';
 import { Link } from 'react-router-dom';
 
 
@@ -10,6 +10,21 @@ interface ChatParams {
 
 const Chat: React.FC<ChatParams> = ({ chatId }) => {
   const { data } = useGetChatQuery({variables: { chatId }});
+  const [message, setMessage] = useState('');
+  const addMessage = useAddMessageMutation();
+
+  const onSendMessage = (content: string) => {
+    addMessage({
+      variables: { chatId, content },
+    });
+  };
+
+  const submitMessage = () => {
+    if (!message) return;
+    setMessage('');
+    onSendMessage(message);
+  };
+
   if (!data) return null;
   
   const chat = data.chat;
@@ -31,8 +46,13 @@ const Chat: React.FC<ChatParams> = ({ chatId }) => {
         ))}
       </ul>
       <div style={style.sendLayout}>
-        <input style={style.input} type="text" placeholder="Type a message" />
-        <button style={style.sendButton} type="button">➡</button>
+      <input
+          style={style.input}
+          type="text" placeholder="Type a message"
+          value={message}
+          onKeyPress={(e: any) => { if (e.charCode === 13) submitMessage() }}
+          onChange={({ target }: any) => { setMessage(target.value) }}/>
+        <button style={style.sendButton} type="button" onClick={submitMessage}>➡</button>
       </div>
     </React.Fragment>
   );
